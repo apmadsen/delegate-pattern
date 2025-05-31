@@ -1,6 +1,6 @@
 [project]
 name = "delegate-pattern"
-version = "0.0.0"
+dynamic = ["version"]
 description = "Python implementation of the Delegation Pattern"
 keywords = ["windows", "linux", "delegates"]
 readme = "README.md"
