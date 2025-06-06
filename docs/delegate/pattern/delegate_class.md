@@ -4,6 +4,8 @@
 
 The `Delegate` class handles registration onto class delegators and the instantiation and communication with the delegate protocol classes. Typically the `dlg = delegate(T)` function is used to assign delegates to classes instead of using the `dlg = Delegate[T]()` syntax since it's cleaner.
 
+## Constructors
+
 ### Delegate[T\<DelegateProtocol>](passthrough: _bool_ = _False_) constructor
 
 The `Delegate` class can be instantiated with or without parameter `passthrough` which specifies if or not communication with delegates should be passed through directly.
