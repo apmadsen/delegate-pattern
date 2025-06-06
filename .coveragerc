@@ -4,6 +4,7 @@ fail_under = 100
 exclude_also =
     pragma: no cover
     @overload
+    @abstract
     from
     import
     def __repr__

@@ -64,64 +64,6 @@ some_instance.name = "Trinity"
 new_name = some_instance.name # => Trinity
 ```
 
-# API
+## Full documentation
 
-## Delegate[T\<DelegateProtocol>] class
-
-The `Delegate` class handles registration onto class delegators and the instantiation and communication with the delegate protocol classes. Typically the `dlg = delegate(T)` function is used to assign delegates to classes instead of using the `dlg = Delegate[T]()` syntax since it's cleaner.
-
-### Delegate[T\<DelegateProtocol>](passthrough: _bool_ = _False_) constructor
-
-The `Delegate` class can be instantiated with or without parameter `passthrough` which specifies if or not communication with delegates should be passed through directly.
-
-When `passthrough` is false, the Delegate class returns the delegate protocol instance when `__get__` in accessed
- on the delegator class, which means that the delegate protocol is visible on the delegator class tree.
-
-When `passthrough` is true, the Delegate class passes `__get__` and `__set__` actions directly onto the delegate protocol instance, which means that whatever is returned from `__get__` is visible on the delegator class tree.
-
-## delegate(T<DelegateProtocol>, passthrough_type: _type[Tr]_) -> _Tr_ function
-
-The `delegate` function is the preferred way of registering delegates, and makes typing easier when registering passthrough delegate protocols.
-
-### Example 1
-
-```python
-from delegate.pattern import delegate
-
-class SayHelloDelegate:
-    def __init__(self, delegator: object):
-        ...
-
-    def __call__(self) -> str:
-        return "Hello world"
-
-class Class1:
-    dlg = delegate(SayHelloDelegate)
-
-inst = Class1()
-inst.dlg() # => 'Hello world'
-```
-
-### Example 2
-
-```python
-from delegate.pattern import delegate
-
-class PropertyDelegate:
-    def __init__(self, delegator: object):
-        self.prop = ""
-
-    def __get__(self) -> str:
-        return self.prop
-
-    def __set__(self, value: str):
-        self.prop = value
-
-class Class1:
-    dlg = delegate(PropertyDelegate, str)
-
-inst = Class1()
-inst.dlg # => ''
-inst.dlg = "Some value"
-inst.dlg # => 'Some value'
-```
+[Go to documentation](https://github.com/apmadsen/delegate-pattern/blob/main/docs/documentation.md)
