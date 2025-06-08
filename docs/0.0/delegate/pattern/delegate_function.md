@@ -1,4 +1,7 @@
-[Documentation](/docs/documentation.md) > [`delegate.pattern`](/docs/delegate/pattern/module.md) > delegate
+[Documentation](/docs/documentation.md) >
+ [v0.0](/docs/0.0/version.md) >
+  [`delegate.pattern`](/docs/0.0/delegate/pattern/module.md) >
+   delegate
 
 ## delegate(T<DelegateProtocol>, passthrough_type: _type[Tr]_) -> _Tr_
 

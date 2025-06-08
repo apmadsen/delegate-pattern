@@ -1,7 +1,6 @@
 [Documentation](/docs/documentation.md)
 
-# Documentation
+# Delegate Pattern documentation
 
-### [`delegate.pattern` module](/docs/delegate/pattern/module.md)
-### [`delegate.pattern.protocols` module](/docs/delegate/pattern/protocols/module.md)
+### [Version 0.0](0.0/version.md)
 
