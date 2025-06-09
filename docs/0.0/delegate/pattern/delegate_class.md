@@ -1,9 +1,10 @@
 [Documentation](/docs/documentation.md) >
  [v0.0](/docs/0.0/version.md) >
-  [`delegate.pattern`](/docs/0.0/delegate/pattern/module.md) >
-   Delegate
+  [delegate](/docs/0.0/delegate/module.md) >
+   [pattern](/docs/0.0/delegate/pattern/module.md) >
+    Delegate
 
-# `Delegate[T<DelegateProtocol>]` class
+# Delegate[T<DelegateProtocol>] class
 
 The `Delegate` class handles registration onto class delegators and the instantiation and communication with the delegate protocol classes. Typically the `dlg = delegate(T)` function is used to assign delegates to classes instead of using the `dlg = Delegate[T]()` syntax since it's cleaner.
 

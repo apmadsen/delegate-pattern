@@ -1,17 +1,18 @@
 [Documentation](/docs/documentation.md) >
  [v0.0](/docs/0.0/version.md) >
-  delegate.pattern
+  [delegate](/docs/0.0/delegate/module.md) >
+    pattern
 
-# `delegate.pattern` module
+# delegate.pattern module
 
 ## Modules
 
-### [`delegate.pattern.protocols` module](protocols/module.md)
+### [protocols](protocols/module.md)
 
 ## Classes
 
-### [`Delegate`](delegate_class.md)
+### [Delegate](delegate_class.md)
 
 ## Functions
 
-### [`delegate`](delegate_function.md)
+### [delegate](delegate_function.md)

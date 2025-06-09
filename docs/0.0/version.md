@@ -5,5 +5,5 @@
 
 ## Modules
 
-### [`delegate.pattern` module](delegate/pattern/module.md)
+### [delegate](delegate/module.md)
 
