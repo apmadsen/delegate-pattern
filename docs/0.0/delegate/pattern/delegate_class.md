@@ -4,13 +4,15 @@
    [pattern](/docs/0.0/delegate/pattern/module.md) >
     Delegate
 
-# Delegate[T<DelegateProtocol>] class
+# Delegate[T\<[DelegateProtocol](protocols/delegate_protocol.md)\>]
 
 The `Delegate` class handles registration onto class delegators and the instantiation and communication with the delegate protocol classes. Typically the `dlg = delegate(T)` function is used to assign delegates to classes instead of using the `dlg = Delegate[T]()` syntax since it's cleaner.
 
+> NOTE: Delegator classes (eg. classes upon which delegates are specified) using slots, need to define attributes `__weakref__` and `__delegates__`.
+
 ## Constructors
 
-### Delegate[T\<DelegateProtocol>](passthrough: _bool_ = _False_) constructor
+### Delegate[T\<[DelegateProtocol](protocols/delegate_protocol.md)>](passthrough: _bool_ = _False_)
 
 The `Delegate` class can be instantiated with or without parameter `passthrough` which specifies if or not communication with delegates should be passed through directly.
 

@@ -4,9 +4,11 @@
    [pattern](/docs/0.0/delegate/pattern/module.md) >
    delegate
 
-## delegate(T<DelegateProtocol>, passthrough_type: _type[Tr]_) -> _Tr_
+## delegate(T<[DelegateProtocol](protocols/delegate_protocol.md)>, passthrough_type: _type[Tr]_) -> _Tr_
 
 The `delegate` function is the preferred way of registering delegates, and makes typing easier when registering passthrough delegate protocols.
+
+> NOTE: Delegator classes (eg. classes upon which delegates are specified) using slots, need to define attributes `__weakref__` and `__delegates__`.
 
 ### Example 1
 

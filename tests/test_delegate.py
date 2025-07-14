@@ -6,7 +6,7 @@ import gc
 
 from delegate.pattern.core.delegate import ATTR
 from delegate.pattern.protocols import ProtocolError
-from delegate.pattern import Delegate, delegate
+from delegate.pattern import Delegate, DelegatorError, delegate
 
 class SomeDelegate:
     def __init__(self, delegator: object):
@@ -184,6 +184,15 @@ def test_garbage_collection():
     assert refs_before_gc > 0
     assert dlg() is None
 
+def test_delegator_slots():
+    class Class1:
+        __slots__ = []
+        event1 = delegate(SomeDelegate)
+
+    with assert_raises(DelegatorError):
+        inst = Class1()
+        ev = inst.event1
+
 
 def test_readme_example1():
     from delegate.pattern import delegate
@@ -227,3 +236,4 @@ def test_readme_example2():
     assert "Some value" == inst.dlg # => 'Some value'
     del inst.dlg
     assert "" == inst.dlg
+

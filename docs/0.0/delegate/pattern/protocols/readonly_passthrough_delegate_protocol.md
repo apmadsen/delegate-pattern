@@ -5,6 +5,6 @@
     [protocols](/docs/0.0/delegate/pattern/protocols/module.md) >
      ReadonlyPassthroughDelegateProtocol
 
-# ReadonlyPassthroughDelegateProtocol class : Protocol
+# ReadonlyPassthroughDelegateProtocol : Protocol
 
 The `ReadonlyPassthroughDelegateProtocol` class is a protocol defining the requirements of a passthrough delegate that only supports reading.

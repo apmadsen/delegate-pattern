@@ -5,6 +5,6 @@
     [protocols](/docs/0.0/delegate/pattern/protocols/module.md) >
      SupportsDeleteProtocol
 
-# SupportsDeleteProtocol class : Protocol
+# SupportsDeleteProtocol : Protocol
 
 The `SupportsDeleteProtocol` class is a protocol defining the requirements of a passthrough delegate that supports reading and deleting.

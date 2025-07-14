@@ -12,6 +12,7 @@
 ## Classes
 
 ### [Delegate](delegate_class.md)
+### [DelegatorError](delegator_error.md)
 
 ## Functions
 

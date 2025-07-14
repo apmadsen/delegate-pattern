@@ -5,6 +5,6 @@
     [protocols](/docs/0.0/delegate/pattern/protocols/module.md) >
      WritablePassthroughDelegateProtocol
 
-# WritablePassthroughDelegateProtocol class : Protocol
+# WritablePassthroughDelegateProtocol : Protocol
 
 The `WritablePassthroughDelegateProtocol` class is a protocol defining the requirements of a passthrough delegate that supports reading and writing.

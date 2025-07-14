@@ -7,6 +7,7 @@ from delegate.pattern.core.protocols.readonly_passthrough_delegate_protocol impo
 from delegate.pattern.core.protocols.writable_passthrough_delegate_protocol import WritablePassthroughDelegateProtocol
 from delegate.pattern.core.protocols.supports_delete_protocol import SupportsDeleteProtocol
 from delegate.pattern.core.protocols.protocol_error import ProtocolError
+from delegate.pattern.core.delegator_error import DelegatorError
 
 T = TypeVar("T", bound = DelegateProtocol)
 Tp = TypeVar("Tp", bound = WritablePassthroughDelegateProtocol)
@@ -56,8 +57,12 @@ class Delegate(Generic[T]):
         if hasattr(delegator, ATTR):
             delegates = cast(WeakKeyDictionary[Delegate[T], T], getattr(delegator, ATTR))
         else:
-            delegates = WeakKeyDictionary()
-            setattr(delegator, ATTR, delegates)
+            try:
+                delegates = WeakKeyDictionary()
+                setattr(delegator, ATTR, delegates)
+            except AttributeError:
+                check_slots(type(delegator))
+                raise # pragma: no cover
 
         if not ( delegate := delegates.get(self) ):
             delegate = self.__delegate_proto(delegator)
@@ -116,3 +121,11 @@ def delegate(delegate: type[Tp], type_out: type[Tout]) -> Tout:
     ...
 def delegate(delegate: type[T], type_out: type[Tout] | None = None) -> Delegate[T] | Tout:
     return Delegate[delegate](type_out is not None)
+
+def check_slots(cls: type[Any]) -> None: # pragma: no cover
+    if hasattr(cls, "__slots__"):
+        slots = getattr(cls, "__slots__")
+        if not ATTR in slots:
+            raise DelegatorError(f"Delegator class {cls.__name__} uses slots, and attribute '{ATTR}' is not defined. Please make sure that attributes '__weakref__' and '{ATTR}' are both defined in class slots.")
+        if not "__weakref__" in slots:
+            raise DelegatorError(f"Delegator class {cls.__name__} uses slots, and attribute '__weakref__' is not defined. Please make sure that attributes '__weakref__' and '{ATTR}' are both defined in class slots.")

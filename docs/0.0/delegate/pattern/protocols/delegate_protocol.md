@@ -5,6 +5,6 @@
     [protocols](/docs/0.0/delegate/pattern/protocols/module.md) >
      DelegateProtocol
 
-# DelegateProtocol class : Protocol
+# DelegateProtocol : Protocol
 
 The `DelegateProtocol` class is a protocol defining the requirements of a delegate, ie. a class having a constructor with one argument, named `delegator`.
