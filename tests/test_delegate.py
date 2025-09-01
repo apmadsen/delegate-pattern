@@ -1,4 +1,5 @@
 # pyright: basic
+# ruff: noqa
 from typing import Any
 from pytest import raises as assert_raises, fixture
 from weakref import WeakKeyDictionary, ref
