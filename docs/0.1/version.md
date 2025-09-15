@@ -1,7 +1,7 @@
 [Documentation](../documentation.md) >
- v0.0
+ v0.1
 
-# Delegate Pattern version 0.0
+# Delegate Pattern version 0.1
 
 ## Modules
 

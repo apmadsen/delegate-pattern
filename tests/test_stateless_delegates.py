@@ -6,21 +6,26 @@ from weakref import WeakKeyDictionary, ref
 import gc
 
 from delegate.pattern.core.delegate import ATTR
+from delegate.pattern.core.compat import is_stateful_delegate
 from delegate.pattern.protocols import ProtocolError
 from delegate.pattern import Delegate, DelegatorError, delegate
+from delegate.pattern.core.protocols.stateless_delegate_protocol import StatelessDelegateProtocol
+from delegate.pattern.core.protocols.stateful_delegate_protocol import StatefulDelegateProtocol
 
 class SomeDelegate:
-    def __init__(self, delegator: object):
-        self.delegator = delegator
+    def __init__(self):
+        pass
 
 class SomeOtherDelegate:
-    def __init__(self, delegator: object):
-        self.delegator = delegator
+    def __init__(self):
+        pass
 
+def test_checks():
 
+    assert not is_stateful_delegate(SomeDelegate)
+    assert not is_stateful_delegate(SomeOtherDelegate)
 
 def test_single_instance():
-
     assert delegate(SomeDelegate) is Delegate[SomeDelegate]()
 
     dlg1 = delegate(SomeDelegate)
@@ -49,6 +54,10 @@ def test_single_instance():
     assert inst.Something is not Class.Something
     assert inst.Something is not Class.Something2
 
+    inst2 = Class()
+    assert inst.Something is inst2.Something
+
+
 
 def test_delegate():
 
@@ -70,24 +79,17 @@ def test_multiple_instances():
     inst1 = Class1()
     inst2 = Class1()
 
-    assert id(Class1.Something) != id(inst1.Something) != id(inst2.Something)
     assert isinstance(Class1.Something, Delegate)
     assert isinstance(inst1.Something, SomeDelegate)
     assert isinstance(inst2.Something, SomeDelegate)
 
-    delegates1 = getattr(inst1, ATTR)
-    delegates2 = getattr(inst2, ATTR)
+    delegates = getattr(Class1, ATTR)
 
-    assert isinstance(delegates1, WeakKeyDictionary)
-    assert isinstance(delegates2, WeakKeyDictionary)
+    assert isinstance(delegates, WeakKeyDictionary)
 
     # since both delegates share the same protocol, they should be the same instance
-    assert Class1.Something == tuple(delegates1.keys())[0] == tuple(delegates2.keys())[0]
+    assert Class1.Something == tuple(delegates.keys())[0]
 
-    # since both instances are of the same class the protocol instances should be the same instance
-    assert tuple(delegates1.values())[0] is not tuple(delegates2.values())[0]
-
-    x=0
 
 def test_same_event_multiple_classes():
     class Class1:
@@ -185,23 +187,11 @@ def test_garbage_collection():
     assert refs_before_gc > 0
     assert dlg() is None
 
-def test_delegator_slots():
-    class Class1:
-        __slots__ = []
-        event1 = delegate(SomeDelegate)
-
-    with assert_raises(DelegatorError):
-        inst = Class1()
-        ev = inst.event1
-
 
 def test_readme_example1():
     from delegate.pattern import delegate
 
     class SayHelloDelegate:
-        def __init__(self, delegator: object):
-            ...
-
         def __call__(self) -> str:
             return "Hello world"
 
@@ -216,16 +206,16 @@ def test_readme_example2():
     from delegate.pattern import delegate
 
     class PropertyDelegate:
-        def __init__(self, delegator: object):
+        def __init__(self):
             self.prop = ""
 
-        def __get__(self) -> str:
+        def __get__(self, delegator: object) -> str:
             return self.prop
 
-        def __set__(self, value: str):
+        def __set__(self, delegator: object, value: str):
             self.prop = value
 
-        def __delete__(self):
+        def __delete__(self, delegator: object):
             self.prop = ""
 
     class Class1:
@@ -238,3 +228,40 @@ def test_readme_example2():
     del inst.dlg
     assert "" == inst.dlg
 
+
+def test_readme_example3():
+    from typing import Protocol
+    from weakref import ref
+    from delegate.pattern import delegate
+
+    class NamedClassProtocol(Protocol):
+        _name: str
+
+    class PrintNameDelegate:
+        def __init__(self, delegator: NamedClassProtocol):
+            self.__delegator = delegator
+
+        def __call__(self):
+            print(self.__delegator._name)
+
+    class NamePropertyDelegate:
+        def __get__(self, delegator: NamedClassProtocol) -> str:
+            return delegator._name
+
+        def __set__(self, delegator: NamedClassProtocol, value: str):
+            delegator._name = value
+
+    class SomeClass:
+        _name: str
+        def __init__(self, name: str) -> None:
+            self._name = name
+
+        name_printer = delegate(PrintNameDelegate) # => PrintNameDelegate instance
+        name = delegate(NamePropertyDelegate, str) # => string getter
+
+    some_instance = SomeClass("Neo")
+    some_instance.name_printer() # prints Neo
+
+    name = some_instance.name # => Neo
+    some_instance.name = "Trinity"
+    new_name = some_instance.name # => Trinity

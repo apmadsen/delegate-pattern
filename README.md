@@ -32,21 +32,18 @@ class NamedClassProtocol(Protocol):
     _name: str
 
 class PrintNameDelegate:
-    def __init__(self, delegator: NamedClassProtocol): # delegator type annotation is syntactic sugar and not enforced in any way
-        self.delegator = ref(delegator)
+    def __init__(self, delegator: NamedClassProtocol):
+        self.__delegator = delegator
 
     def __call__(self):
-        print(self.delegator()._name)
+        print(self.__delegator._name)
 
 class NamePropertyDelegate:
-    def __init__(self, delegator: NamedClassProtocol): # delegator type annotation is syntactic sugar and not enforced in any way
-        self.delegator = ref(delegator)
+    def __get__(self, delegator: NamedClassProtocol) -> str:
+        return delegator._name
 
-    def __get__(self) -> str:
-        return self.delegator()._name
-
-    def __set__(self, value: str):
-        self.delegator()._name = value
+    def __set__(self, delegator: NamedClassProtocol, value: str):
+        delegator._name = value
 
 class SomeClass:
     _name: str
