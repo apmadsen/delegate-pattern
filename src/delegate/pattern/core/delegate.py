@@ -33,7 +33,7 @@ class Delegate(Generic[T]):
         if dlg := DELEGATES.get((delegate_proto, passthrough)):
             return dlg
 
-        instance = super().__new__(cls)
+        instance = object().__new__(cls)
         instance.__delegate_proto = delegate_proto
         instance.__is_stateful = is_stateful_delegate(delegate_proto)
         instance.__passthrough = passthrough
@@ -70,10 +70,10 @@ class Delegate(Generic[T]):
                     setattr(obj, ATTR, delegates)
                     return delegates
                 except AttributeError:
-                    if is_type(obj):
-                        check_slots(obj)
-                    else:
+                    if not is_type(obj):
                         check_slots(type(obj)) # pyright: ignore[reportUnknownArgumentType]
+                    else:
+                        pass # impossible # pragma: no cover
                     raise # pragma: no cover
 
         if self.__is_stateful:
@@ -154,3 +154,4 @@ def check_slots(cls: type[Any]) -> None: # pragma: no cover
             raise DelegatorError(f"Delegator class {cls.__name__} uses slots, and attribute '{ATTR}' is not defined. Please make sure that attributes '__weakref__' and '{ATTR}' are both defined in class slots.")
         if "__weakref__" not in slots:
             raise DelegatorError(f"Delegator class {cls.__name__} uses slots, and attribute '__weakref__' is not defined. Please make sure that attributes '__weakref__' and '{ATTR}' are both defined in class slots.")
+

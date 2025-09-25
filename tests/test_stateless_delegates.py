@@ -164,7 +164,6 @@ def test_passthrough_delegates():
     with assert_raises(ProtocolError):
         del some_instance1.name
 
-
 def test_garbage_collection():
     class OtherDelegate:
         def __init__(self, delegator: object):

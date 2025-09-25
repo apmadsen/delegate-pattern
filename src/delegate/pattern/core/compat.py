@@ -14,7 +14,7 @@ def is_stateful_delegate(delegate: type[StatelessDelegateProtocol | StatefulDele
         return (
             len(parameters) == 2
 
-            and parameters[0].name.lower() == "self"
+            and parameters[0].name.lower() in ("self", "cls")
             and parameters[0].kind in (Parameter.POSITIONAL_ONLY, Parameter.POSITIONAL_OR_KEYWORD)
 
             and parameters[1].name.lower() == "delegator"
