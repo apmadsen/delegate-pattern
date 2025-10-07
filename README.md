@@ -15,6 +15,8 @@ Delegation is a pattern in object oriented programming where a class (delegator)
 
 This allows for greater code reusability and reduced class complexity and may help adhering to the DRY (Do not Repeat Yourself) and SoC (Separation of Concerns) principles.
 
+
+
 ## Example
 
 Consider a trivial task of delegating the printing of an objects name to the console. Here the delegator `SomeClass` delegates the task to the delegate `PrintNameDelegate` which is not much more than a function wrapped in a class.
@@ -32,21 +34,24 @@ class NamedClassProtocol(Protocol):
     _name: str
 
 class PrintNameDelegate:
-    def __init__(self, delegator: NamedClassProtocol): # delegator type annotation is syntactic sugar and not enforced in any way
-        self.delegator = ref(delegator)
+    # this is a stateful delegate because its constructor
+    # takes a 'delegator' argument
+
+    def __init__(self, delegator: NamedClassProtocol):
+        self.__delegator = delegator
 
     def __call__(self):
-        print(self.delegator()._name)
+        print(self.__delegator._name)
 
 class NamePropertyDelegate:
-    def __init__(self, delegator: NamedClassProtocol): # delegator type annotation is syntactic sugar and not enforced in any way
-        self.delegator = ref(delegator)
+    # this is a stateless delegate because it has no
+    # constructor which takes a 'delegator' argument
 
-    def __get__(self) -> str:
-        return self.delegator()._name
+    def __get__(self, delegator: NamedClassProtocol) -> str:
+        return delegator._name
 
-    def __set__(self, value: str):
-        self.delegator()._name = value
+    def __set__(self, delegator: NamedClassProtocol, value: str):
+        delegator._name = value
 
 class SomeClass:
     _name: str

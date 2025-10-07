@@ -1,5 +1,5 @@
 [Documentation](../../../documentation.md) >
- [v0.0](../../version.md) >
+ [v0.1](../../version.md) >
   [delegate](../module.md) >
    pattern
 
