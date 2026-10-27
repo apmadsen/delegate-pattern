@@ -1,9 +1,15 @@
+from inspect import Parameter, Signature, signature
 from typing import Protocol
-from typingutils.internal import get_generic_origin
-from inspect import Signature, Parameter, signature
 
-from delegate.pattern.core.protocols.stateful_delegate_protocol import StatefulDelegateProtocol
-from delegate.pattern.core.protocols.stateless_delegate_protocol import StatelessDelegateProtocol
+from typingutils.internal import get_generic_origin
+
+from delegate.pattern.core.protocols.stateful_delegate_protocol import (
+    StatefulDelegateProtocol,
+)
+from delegate.pattern.core.protocols.stateless_delegate_protocol import (
+    StatelessDelegateProtocol,
+)
+
 
 class DummyProtocol(Protocol):
     pass
