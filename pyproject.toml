@@ -38,8 +38,8 @@ repository = "https://github.com/apmadsen/delegate-pattern"
 
 [project.optional-dependencies]
 test = [
-    "pytest>=8.3",
-    "pytest-cov>=6.1",
+    "pytest>=9.0",
+    "pytest-cov>=7.0",
 ]
 
 [tool.setuptools-git-versioning]
