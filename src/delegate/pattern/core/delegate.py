@@ -1,18 +1,35 @@
-from typing import Generic, TypeVar, Any, cast, overload
-from typingutils import get_generic_arguments, is_type
-from weakref import WeakValueDictionary, WeakKeyDictionary
+from typing import Any, Generic, TypeVar, cast, overload
+from weakref import WeakKeyDictionary, WeakValueDictionary
 
-from delegate.pattern.core.protocols.stateful_delegate_protocol import StatefulDelegateProtocol
-from delegate.pattern.core.protocols.stateful_readable_delegate_protocol import StatefulReadableDelegateProtocol
-from delegate.pattern.core.protocols.stateful_writable_delegate_protocol import StatefulWritableDelegateProtocol
-from delegate.pattern.core.protocols.stateful_deleteable_delegate_protocol import StatefulDeleteableDelegateProtocol
-from delegate.pattern.core.protocols.stateless_delegate_protocol import StatelessDelegateProtocol
-from delegate.pattern.core.protocols.stateless_readable_delegate_protocol import StatelessReadableDelegateProtocol
-from delegate.pattern.core.protocols.stateless_writable_delegate_protocol import StatelessWritableDelegateProtocol
-from delegate.pattern.core.protocols.stateless_deleteable_delegate_protocol import StatelessDeleteableDelegateProtocol
-from delegate.pattern.core.protocols.protocol_error import ProtocolError
-from delegate.pattern.core.delegator_error import DelegatorError
+from typingutils import get_generic_arguments, is_type
+
 from delegate.pattern.core.compat import is_stateful_delegate
+from delegate.pattern.core.delegator_error import DelegatorError
+from delegate.pattern.core.protocols.protocol_error import ProtocolError
+from delegate.pattern.core.protocols.stateful_delegate_protocol import (
+    StatefulDelegateProtocol,
+)
+from delegate.pattern.core.protocols.stateful_deleteable_delegate_protocol import (
+    StatefulDeleteableDelegateProtocol,
+)
+from delegate.pattern.core.protocols.stateful_readable_delegate_protocol import (
+    StatefulReadableDelegateProtocol,
+)
+from delegate.pattern.core.protocols.stateful_writable_delegate_protocol import (
+    StatefulWritableDelegateProtocol,
+)
+from delegate.pattern.core.protocols.stateless_delegate_protocol import (
+    StatelessDelegateProtocol,
+)
+from delegate.pattern.core.protocols.stateless_deleteable_delegate_protocol import (
+    StatelessDeleteableDelegateProtocol,
+)
+from delegate.pattern.core.protocols.stateless_readable_delegate_protocol import (
+    StatelessReadableDelegateProtocol,
+)
+from delegate.pattern.core.protocols.stateless_writable_delegate_protocol import (
+    StatelessWritableDelegateProtocol,
+)
 
 T = TypeVar("T", bound = StatefulDelegateProtocol | StatelessDelegateProtocol)
 Tp = TypeVar("Tp", bound = StatefulWritableDelegateProtocol | StatelessWritableDelegateProtocol)
@@ -23,7 +40,7 @@ ATTR = "__delegates__"
 DELEGATES: WeakValueDictionary[tuple[type[Any], bool], 'Delegate[Any]'] = WeakValueDictionary()
 
 class Delegate(Generic[T]):
-    __slots__ = [ "__weakref__", "__delegate_proto", "__is_stateful", "__passthrough" ]
+    __slots__ = ["__delegate_proto", "__is_stateful", "__passthrough", "__weakref__"]
     __delegate_proto: type[T]
     __passthrough: bool
 
@@ -115,7 +132,7 @@ class Delegate(Generic[T]):
             delegate.__delete__(delegator)
         elif self.__passthrough:
             raise ProtocolError("Delegate protocol is not a valid DeleteableDelegateProtocol")
-        pass # pragma: no cover
+        pass # pragma: no cover  # noqa: PIE790
 
 
 @overload
@@ -129,7 +146,6 @@ def delegate(delegate: type[T]) -> Delegate[T]:
     Returns:
         Delegate[T]: Returns a Delegate[T] object.
     """
-    ...
 @overload
 def delegate(delegate: type[T], type_out: type[Tout]) -> Tout:
     """
@@ -143,13 +159,12 @@ def delegate(delegate: type[T], type_out: type[Tout]) -> Tout:
     Returns:
         Delegate[Tp]: Returns a Delegate[Tp] object.
     """
-    ...
 def delegate(delegate: type[T], type_out: type[Tout] | None = None) -> Delegate[T] | Tout:
     return Delegate[delegate](type_out is not None)
 
 def check_slots(cls: type[Any]) -> None: # pragma: no cover
     if hasattr(cls, "__slots__"):
-        slots = getattr(cls, "__slots__")
+        slots = cls.__slots__
         if ATTR not in slots:
             raise DelegatorError(f"Delegator class {cls.__name__} uses slots, and attribute '{ATTR}' is not defined. Please make sure that attributes '__weakref__' and '{ATTR}' are both defined in class slots.")
         if "__weakref__" not in slots:

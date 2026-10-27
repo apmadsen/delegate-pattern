@@ -3,6 +3,6 @@ from delegate.pattern.core.delegator_error import DelegatorError
 
 __all__ = (
     'Delegate',
-    'delegate',
     'DelegatorError',
+    'delegate',
 )
